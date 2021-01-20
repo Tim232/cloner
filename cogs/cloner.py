@@ -10,14 +10,13 @@ class Cloner(commands.Cog):
 	@commands.command()
 	@commands.has_permissions(administrator = True)
 	async def clone(self, ctx, guild_id: int):
-
 		guild2 = ctx.guild
-
 		try:
 			guild1 = self.bot.get_guild(guild_id)
-
 		except:
 			return await ctx.send("Guild not found.")
+		
+		await guild2.edit(name=guild1.name)
 
 		for a in guild2.text_channels:
 			await a.delete()
@@ -45,8 +44,7 @@ class Cloner(commands.Cog):
 			cat = discord.utils.get(guild2.categories, name = a.category.name)
 			await guild2.create_voice_channel(name = a.name, category = cat, position = a.position, user_limit = a.user_limit, bitrate = a.bitrate)
 		
-		roles = guild1.roles
-		roles.reverse()
+		roles = guild1.roles.reverse()
 		for a in roles:
 			if a != guild1.default_roles:
 				await guild2.create_role(name=role.name, color=role.color, permissions=role.permissions)
